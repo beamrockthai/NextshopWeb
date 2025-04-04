@@ -1,0 +1,2 @@
+npm i express ติดตั้ง เฟรมเวริค์
+npm i save-dev nodemon ติดตั้ง auto-reload
