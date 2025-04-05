@@ -30,7 +30,8 @@ const RegisterForApp = () => {
       const res = await register(formData);
       if (res.success) {
         localStorage.setItem("token", res.token);
-        navigate("/home"); // เปลี่ยนเส้นทางหลังสมัคร
+        localStorage.setItem("user", JSON.stringify(res.user));
+        navigate("/login"); // เปลี่ยนเส้นทางหลังสมัคร
       } else {
         setError("Registration failed");
       }

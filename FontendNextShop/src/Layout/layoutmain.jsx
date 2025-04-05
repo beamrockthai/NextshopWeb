@@ -5,7 +5,18 @@ import { Store } from "lucide-react";
 const LayoutMain = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const user = (() => {
+    try {
+      const raw = localStorage.getItem("user");
+      if (!raw || raw === "undefined") return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      console.error("❌ Failed to parse user:", e);
+      return null;
+    }
+  })();
+
   const userRole = user?.role || "guest";
   const [isExpanded, setIsExpanded] = useState(false);
 
