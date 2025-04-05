@@ -16,16 +16,25 @@ import UserAdmin from "./components/userAdmin";
 import ProtectedRoute from "./admin/ProtectedRoutes";
 
 function App() {
+  const isLoggedIn = !!localStorage.getItem("token"); // ตรวจว่า login แล้วไหม
+
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterForApp />} />
-      <Route path="/" element={<Navigate to="/home" />} />
 
+      {/* Redirect ไป login หรือ home ตามสถานะ */}
+      <Route
+        path="/"
+        element={<Navigate to={isLoggedIn ? "/home" : "/login"} />}
+      />
+
+      {/* Layout หลักหลัง login */}
       <Route path="/" element={<LayoutMain />}>
         <Route path="home" element={<Home />} />
         <Route path="profile" element={<Profile />} />
 
+        {/* Route เฉพาะ admin */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route path="marketAdmin" element={<CreateMarket />} />
           <Route path="userAdmin" element={<UserAdmin />} />
