@@ -13,6 +13,8 @@ const sessionStore = new SequelizeStore({
   db: sequelize,
 });
 
+app.set("trust proxy", 1); // ✅ สำหรับ secure cookie บน Render
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "your_secret_key",
@@ -20,16 +22,15 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true, // ใช้ HTTPS เท่านั้น
-      httpOnly: true, // ป้องกัน XSS
-      maxAge: 24 * 60 * 60 * 1000, // 1 วัน
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
 
 sessionStore.sync();
 
-// ใช้ PrettyError เพื่อ render error
 process.on("unhandledRejection", (reason, promise) => {
   console.error(
     "Unhandled Rejection at:",
@@ -39,13 +40,10 @@ process.on("unhandledRejection", (reason, promise) => {
   );
 });
 
-// เชื่อมต่อกับฐานข้อมูล
 (async () => {
   try {
-    await sequelize.sync({ force: false, alter: true }); // ปรับให้เหมาะกับ Production
-
-    // เริ่มต้นเซิร์ฟเวอร์
-    const PORT = process.env.PORT || 3001; // ใช้ Render PORT
+    await sequelize.sync({ force: false, alter: true });
+    const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
       console.log(`✅ Server is running on port ${PORT}`);
     });
@@ -54,14 +52,12 @@ process.on("unhandledRejection", (reason, promise) => {
   }
 })();
 
-// ✅ Debug: แสดงเส้นทาง API ที่โหลดใน Express
 app._router.stack.forEach((r) => {
   if (r.route && r.route.path) {
     debug(`🔹 ${r.route.stack[0].method.toUpperCase()} ${r.route.path}`);
   }
 });
 
-// 🚀 ป้องกัน Process ค้างเมื่อปิดเซิร์ฟเวอร์
 process.on("SIGINT", async () => {
   console.log("🛑 Server is shutting down...");
   await sequelize.close();
