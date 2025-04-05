@@ -22,8 +22,6 @@ const LoginPage = () => {
       const res = await login(formData);
 
       if (res.success) {
-        console.log("🎉 Login success");
-
         localStorage.setItem("token", res.token);
 
         navigate("/home");
@@ -42,18 +40,14 @@ const LoginPage = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
     >
-      {/* Section ซ้าย - background image */}
       <div
         className="hidden lg:flex w-full lg:w-1/2 justify-around items-center"
         style={{
           background: `url(${Image}) center center`,
           backgroundSize: "cover",
         }}
-      >
-        {/* คุณสามารถใส่ text/logo ตรงนี้ได้ */}
-      </div>
+      ></div>
 
-      {/* Section ขวา - login form */}
       <div className="flex w-full lg:w-1/2 justify-center items-center bg-white">
         <motion.div
           className="w-full px-8 md:px-32 lg:px-24"

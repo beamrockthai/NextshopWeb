@@ -13,7 +13,7 @@ const Profile = () => {
         setUser(res.data);
       } catch (err) {
         setError(err.message || "Failed to load user profile");
-        console.error("❌ Failed to load user profile", err);
+        console.error("Failed to load user profile", err);
       }
     };
 

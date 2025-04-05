@@ -4,7 +4,9 @@ import { Store } from "lucide-react";
 
 const LayoutMain = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // ใช้สำหรับเช็ค path ปัจจุบัน
+  const location = useLocation();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userRole = user?.role || "guest";
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleLogout = () => {
@@ -15,7 +17,7 @@ const LayoutMain = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      {/* ✅ Sidebar: Fixed ตลอดจอ */}
+      {/* Sidebar: Fixed ตลอดจอ */}
       <div
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
@@ -35,29 +37,31 @@ const LayoutMain = () => {
 
             {/* Menu */}
             <ul className="mt-6 space-y-2 tracking-wide">
-              {menuItems.map((item, index) => {
-                const isActive = location.pathname === item.path;
+              {menuItems
+                .filter((item) => item.role.includes(userRole))
+                .map((item, index) => {
+                  const isActive = location.pathname === item.path;
 
-                return (
-                  <li className="min-w-max" key={index}>
-                    <Link
-                      to={item.path}
-                      className={`group flex items-center space-x-4 px-4 py-3 rounded-md transition-colors duration-200 ease-in-out ${
-                        isActive
-                          ? "text-white bg-gradient-to-r from-sky-600 to-cyan-400"
-                          : "text-gray-600 hover:bg-gray-100"
-                      }`}
-                    >
-                      {item.icon}
-                      {isExpanded && (
-                        <span className="group-hover:text-gray-700 font-medium transition duration-200">
-                          {item.label}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
+                  return (
+                    <li className="min-w-max" key={index}>
+                      <Link
+                        to={item.path}
+                        className={`group flex items-center space-x-4 px-4 py-3 rounded-md transition-colors duration-200 ease-in-out ${
+                          isActive
+                            ? "text-white bg-gradient-to-r from-sky-600 to-cyan-400"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                      >
+                        {item.icon}
+                        {isExpanded && (
+                          <span className="group-hover:text-gray-700 font-medium transition duration-200">
+                            {item.label}
+                          </span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
             </ul>
           </div>
 
@@ -94,7 +98,7 @@ const LayoutMain = () => {
         </div>
       </div>
 
-      {/* ✅ Main Content */}
+      {/* Main Content */}
       <main
         className={`flex-1 transition-all duration-300 ease-in-out px-6 pt-0 pb-6 ml-[3.35rem] ${
           isExpanded ? "md:ml-56" : "md:ml-[3.35rem]"
@@ -111,6 +115,7 @@ const menuItems = [
   {
     label: "Home",
     path: "/home",
+    role: ["user", "admin"],
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -129,6 +134,7 @@ const menuItems = [
   {
     label: "Profile",
     path: "/profile",
+    role: ["user", "admin"],
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -143,6 +149,7 @@ const menuItems = [
   {
     label: "MarketAdmin",
     path: "/marketAdmin",
+    role: ["admin"],
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -161,6 +168,7 @@ const menuItems = [
   {
     label: "ManageUser",
     path: "/userAdmin",
+    role: ["admin"],
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

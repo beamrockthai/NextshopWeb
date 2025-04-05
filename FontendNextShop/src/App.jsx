@@ -12,20 +12,24 @@ import Profile from "./components/Profile";
 import CreateMarket from "./components/CreateMarket";
 import UserAdmin from "./components/userAdmin";
 
+//Admin ProtechRoutes
+import ProtectedRoute from "./admin/ProtectedRoutes";
+
 function App() {
   return (
     <Routes>
-      {/* ❌ หน้าไม่มี Layout */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterForApp />} />
       <Route path="/" element={<Navigate to="/home" />} />
 
-      {/* ✅ หน้าใน Layout */}
       <Route path="/" element={<LayoutMain />}>
         <Route path="home" element={<Home />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="marketAdmin" element={<CreateMarket />} />
-        <Route path="userAdmin" element={<UserAdmin />} />
+
+        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+          <Route path="marketAdmin" element={<CreateMarket />} />
+          <Route path="userAdmin" element={<UserAdmin />} />
+        </Route>
       </Route>
     </Routes>
   );
