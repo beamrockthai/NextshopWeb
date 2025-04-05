@@ -18,6 +18,6 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["light"], // เปลี่ยนธีมเป็น Dark Mode
+    themes: ["light"], // เปลี่ยนธีมเป็น Dark Modeไ
   },
 };
