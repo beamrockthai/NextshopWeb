@@ -4,14 +4,18 @@ require("dotenv").config();
 let sequelize;
 
 if (process.env.DATABASE_URL) {
-  // ✅ ใช้ DATABASE_URL จาก Render
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
     protocol: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
     logging: false,
   });
 } else {
-  // 🔧 fallback สำหรับ local dev
   sequelize = new Sequelize(
     process.env.DB_NAME || "postgres",
     process.env.DB_USER || "postgres",
