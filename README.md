@@ -1,3 +1,9 @@
+## สมาชิกในกลุ่ม
+
+## Thatchanon Rodwong 6602041520101
+## Prachwit Tiemmungpan 6602041510033
+## Chonlatarn Nambut 6602041520047
+
 ## 🚀 เครื่องมือที่ใช้นะครับ
 
 ### 🧠 Backend
@@ -14,4 +20,4 @@
 - [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS
 - [DaisyUI](https://daisyui.com/) – UI Components สำหรับ Tailwind
 
----
+
